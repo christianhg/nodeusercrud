@@ -1,0 +1,57 @@
+extends layout
+
+block content
+	h2 Create user
+
+	form(method="post", action="createUser")
+		if error && error.errors.username
+			.form-group.has-feedback.has-error
+				label(for="username").control-label Username:
+				input(type="text", name="username").form-control
+				.alert.alert-danger= error.errors.username.message
+		else
+			.form-group
+				label(for="username").control-label Username:
+				input(type="text", name="username").form-control
+		if error && error.errors["name.first"]
+			.form-group.has-feedback.has-error
+				label(for="firstName").control-label First name:
+				input(type="text", name="firstName").form-control
+				.alert.alert-danger= error.errors["name.first"].message
+		else
+			.form-group
+				label(for="firstName").control-label First name:
+				input(type="text", name="firstName").form-control
+		if error && error.errors["name.last"] 
+			.form-group.has-feedback.has-error
+				label(for="lastName").control-label Last name:
+				input(type="text", name="lastName").form-control
+				.alert.alert-danger= error.errors["name.last"].message
+		else
+			.form-group
+				label(for="lastName").control-label Last name:
+				input(type="text", name="lastName").form-control
+		.form-group
+			input(type="submit", value="Create user").btn.btn-success
+
+	h2 Users
+	table.table
+		thead
+			tr
+				th username
+				th first name
+				th last name
+				th
+				th 
+		tbody
+			each user in users
+				tr
+					td= user.username
+					td= user.name.first
+					td= user.name.last
+					td
+						a(href="/user/"+user._id).btn.btn-info Edit
+					td
+						form(method="post", action="/deleteUser/#{user._id}")
+							input(type="hidden", name="_method", value="delete")
+							input(type="submit", value="Delete").btn.btn-danger
